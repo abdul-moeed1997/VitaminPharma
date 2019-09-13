@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Cart &mdash; Pharma</title>
+{% endblock %}
+
+{% block body %}
+<div class="alert alert-danger" id="msg">
+
+</div>
+    <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0">
+            <a href="/">Home</a> <span class="mx-2 mb-0">/</span>
+            <strong class="text-black">Cart</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row mb-5">
+          <form class="col-md-12" method="post">
+            <div class="site-blocks-table">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th class="product-thumbnail">Image</th>
+                    <th class="product-name">Product</th>
+                    <th class="product-price">Price</th>
+                    <th class="product-quantity">Quantity</th>
+                    <th class="product-total">Total</th>
+                    <th class="product-remove">Remove</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row mb-5">
+              <div class="col-md-6 mb-3 mb-md-0">
+                <button class="btn btn-primary btn-md btn-block" onclick="window.location='/shop/cart/'">Update Cart</button>
+              </div>
+              <div class="col-md-6">
+                <button class="btn btn-outline-primary btn-md btn-block" onclick="window.location='/shop/products/'">Continue Shopping</button>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-md-6 pl-5">
+            <div class="row justify-content-end">
+              <div class="col-md-7">
+                <div class="row">
+                  <div class="col-md-12 text-right border-bottom mb-5">
+                    <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+                  </div>
+                </div>
+                <div class="row mb-5">
+                  <div class="col-md-6">
+                    <span class="text-black">Total</span>
+                  </div>
+                  <div class="col-md-6 text-right">
+                    <strong class="text-black">Rs. <span id="totalPrice">0</span></strong>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <button class="btn btn-primary btn-lg btn-block" onclick="checkcart();">Proceed To
+                      Checkout</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+     console.log(cart);
+    totalPrice=0;
+if ($.isEmptyObject(cart)) {
+    //if object is empty
+    mystr = `<h5 style="color:red;">Your cart is empty, please add some items to your cart before checking out!</h5>`
+    $('#tbody').append(mystr);
+} else {
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        let itemPrice= cart[item][2];
+        let image = cart[item][3];
+        let p_price = qty * itemPrice;
+        totalPrice = totalPrice + p_price ;
+
+        mystr = `<tr>
+                    <td class="product-thumbnail">
+                      <img src="${image}" alt="Image" class="img-fluid">
+                    </td>
+                    <td class="product-name">
+                      <h2 class="h5 text-black">${name}</h2>
+                    </td>
+                    <td>Rs. ${itemPrice}</td>
+                    <td>
+                        <div class="col-xs-1">
+                        <input type="number" class="form-control text-center inputqty" id="${item}" min="1" value="${qty}">{% csrf_token %}
+                        </div>
+                    </td>
+                    <td>Rs. <span id="price${item}">${p_price}</span></td>
+                    <td><a href="#" id="${item}" class="btn btn-primary height-auto btn-sm crossqty">X</a></td>
+                  </tr>`
+            $('#tbody').append(mystr);
+    }
+
+}
+document.getElementById('totalPrice').innerHTML = `Rs.${totalPrice}`;
+
+$('.inputqty').on("change", function(){
+    let id = this.id.toString();
+    if(document.getElementById(id).value > 0)
+    {
+        cart[id][0] = Number(document.getElementById(id).value);
+        let pp_price = cart[id][0]*cart[id][2];
+        document.getElementById('price'+id).innerText = pp_price;
+         localStorage.setItem('cart', JSON.stringify(cart));
+    }
+    else{
+        document.getElementById(id).value = 1;
+         cart[id][0] = document.getElementById(id).value;
+        let pp_price = cart[id][0]*cart[id][2];
+        document.getElementById('price'+id).innerText = pp_price;
+    }
+
+});
+$('.crossqty').on("click", function(){
+    let id = this.id.toString();
+    delete cart[id];
+    localStorage.setItem('cart', JSON.stringify(cart));
+    document.location = "/shop/cart/";
+});
+function checkcart(){
+
+    if ($.isEmptyObject(cart)) {
+        //if object is empty
+        document.getElementById('msg').innerHTML = `<strong>Error!</strong> Please add something to cart before checkout.`;
+
+    }
+    else{
+         document.location = "/shop/checkout/";
+    }
+}
+
+
+{% endblock %}

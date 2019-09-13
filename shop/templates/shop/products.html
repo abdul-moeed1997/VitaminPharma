@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block title %}
+    <title>Products &mdash; Pharma</title>
+{% endblock %}
+
+{% block body %}
+
+        <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Store</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+
+        <div class="row">
+          <div class="col-lg-6">
+            <h3 class="mb-3 h6 text-uppercase text-black d-block">Filter by Category</h3>
+            <button type="button" class="btn btn-secondary btn-md dropdown-toggle px-4" id="dropdownMenuReference"
+              data-toggle="dropdown">Category</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+              {% for cat, count in catagery|zip:cat_count %}
+              <a class="dropdown-item" href="/shop/category/?cat={{ cat }}">{{ cat }}<span>({{ count }})</span></a>
+                {% endfor %}
+            </div>
+          </div>
+            <div class="col-lg-6">
+            <h3 class="mb-3 h6 text-uppercase text-black d-block">Filter by Brands</h3>
+            <button type="button" class="btn btn-secondary btn-md dropdown-toggle px-4" id="dropdownMenuReference"
+              data-toggle="dropdown">Brands</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                {% for brand , count in brands|zip:brand_count %}
+                    <a class="dropdown-item" href="/shop/brand/?brand={{ brand }}">{{ brand }}<span>({{ count }})</span></a>
+                  {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+            {% for product in products %}
+          <div class="col-sm-6 col-lg-4 text-center item mb-4 mt-5">
+            {% if product.old_price %}
+              <span class="tag">Sale <span>{{ product.price|cal_percentage:product.old_price }}%</span></span>
+              {% endif %}
+            <a href="/shop/product/{{ product.id }}"> <img style="height: 280px; width: 280px" src="/media/{{ product.image }}" alt="Image"></a>
+            <h3 class="text-dark"><a href="/shop/product/{{ product.id }}">{{ product.name }}</a></h3>
+            {% if product.old_price %}
+              <p class="price"><del>{{ product.old_price }}</del> &mdash; Rs. {{ product.price }}</p>{% else %}
+                <p class="price">Rs. {{ product.price }}</p>
+          {% endif %}
+          </div>
+            {% endfor %}
+        </div>
+        <div class="row mt-5">
+          <div class="col-md-12 text-center">
+            <div class="site-block-27">
+              <ul>
+              {% if products.has_previous %}
+                <li><a href="?page=1">&lt;<</a></li>
+                <li><a href="?page={{ products.previous_page_number }}">&lt;</a></li>
+              {% endif %}
+                  {% for num in products.paginator.page_range %}
+                    {% if products.number == num %}
+                <li class="active"><span>{{ num }}</span></li>
+                 {% elif num > products.number|add:-2 and num < products.number|add:2 %}
+                <li><a href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+              {% endfor %}
+               {% if products.has_next %}
+                <li><a href="?page={{ products.next_page_number }}">&gt;</a></li>
+                <li><a href="?page={{ products.paginator.num_pages }}">>></a></li>
+              {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Contact Us &mdash; Pharma</title>
+{% endblock %}
+
+{% block body %}
+    <div id="contact" class="container">
+  <h2 style="color: black" class="text-center my-4">Contact Us</h2>
+  <p class="text-center"><em>We love our Customers!</em></p>
+
+  <div class="row">
+    <div class="col-md-4">
+      <p>Fan? Drop a note.</p>
+      <p><span class="glyphicon glyphicon-map-marker"></span>Lahore, Pakistan</p>
+      <p><span class="glyphicon glyphicon-phone"></span>Phone: 0308-6918328</p>
+    </div>
+    <div class="col-md-8">
+        <form action="/shop/contact/" method="post"> {% csrf_token %}
+      <div class="row">
+        <div class="col-sm-6 form-group">
+
+          <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+        </div>
+        <div class="col-sm-6 form-group">
+          <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
+        </div>
+      </div>
+      <textarea class="form-control" id="comment" name="comment" placeholder="Comment" rows="5" required></textarea>
+      <br>
+      <div class="row">
+        <div class="col-md-12 form-group">
+          <button style="heigth:30px; width:80px;" class="btn btn-outline-primary my-2 my-sm-0" type="submit" id="submitbtn">Send</button>
+        </div>
+      </div>
+            </form>
+    </div>
+  </div>
+  <br>
+</div>
+{% endblock %}
+{% block script %}
+
+    {% if Thank %}
+     Swal.fire({
+        type: 'success',
+        title: ':)',
+        text: 'Thanks for your Feedback.',
+     }).then(function(){
+        document.location = "/shop";
+     });
+
+    {% endif %}
+
+{% endblock %}

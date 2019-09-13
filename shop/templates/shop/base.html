@@ -1,0 +1,140 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% block title %}{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  <link href="https://fonts.googleapis.com/css?family=Rubik:400,700|Crimson+Text:400,400i" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'shop/fonts/icomoon/style.css'%}">
+
+  <link rel="stylesheet" href="{% static 'shop/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'shop/css/magnific-popup.css' %}">
+  <link rel="stylesheet" href="{% static 'shop/css/jquery-ui.css'%}">
+  <link rel="stylesheet" href="{% static 'shop/css/owl.carousel.min.css'%}">
+  <link rel="stylesheet" href="{% static 'shop/css/owl.theme.default.min.css'%}">
+
+
+  <link rel="stylesheet" href="{% static 'shop/css/aos.css' %}">
+
+  <link rel="stylesheet" href="{% static 'shop/css/style.css'%}">
+
+</head>
+
+<body>
+
+  <div class="site-wrap">
+
+    <div class="site-navbar py-2">
+
+      <div class="search-wrap">
+        <div class="container">
+          <a href="#" class="search-close js-search-close"><span class="icon-close2"></span></a>
+          <form action="/shop/search" method="get">
+            <input type="text" id="search" name="search" class="form-control" placeholder="Search keyword and hit enter...">
+          </form>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="logo">
+            <div class="site-logo">
+              <a href="/" class="js-logo-clone">Vitamin</a>
+            </div>
+          </div>
+          <div class="main-nav d-none d-lg-block">
+            <nav class="site-navigation text-right text-md-center" role="navigation">
+              <ul class="site-menu js-clone-nav d-none d-lg-block">
+                <li class="active"><a href="/">Home</a></li>
+                <li>
+                  <a href="/shop/products/">Store</a>
+                </li>
+                   <li><a href="/shop/tracker/">Tracker</a></li>
+                <li><a href="/shop/about/">About</a></li>
+                <li><a href="/shop/contact/">Contact</a></li>
+              </ul>
+            </nav>
+          </div>
+          <div class="icons">
+            <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+            <a href="/shop/cart" class="icons-btn d-inline-block bag">
+              <span class="icon-shopping-bag"></span>
+              <span class="number" id="total-pro">0</span>
+            </a>
+            <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span
+                class="icon-menu"></span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      {% block body %} {% endblock %}
+
+
+  <footer class="site-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+
+            <div class="block-7">
+              <h3 class="footer-heading mb-4">About Us</h3>
+              <p>The Products we offer to our customer all are imported and 100% original.</p>
+            </div>
+
+          </div>
+          <div class="col-lg-3 mx-auto mb-5 mb-lg-0">
+            <h3 class="footer-heading mb-4">Quick Links</h3>
+            <ul class="list-unstyled">
+              <li><a href="/shop/products/">Store</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="block-5 mb-5">
+              <h3 class="footer-heading mb-4">Contact Info</h3>
+              <ul class="list-unstyled">
+                <li class="address">Lahore, Pakistan</li>
+                <li class="phone"><a href="tel://0308-6918328">0308-6918328</a></li>
+              </ul>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{% static 'shop/js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'shop/js/jquery-ui.js' %}"></script>
+  <script src="{% static 'shop/js/popper.min.js' %}"></script>
+  <script src="{% static 'shop/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'shop/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'shop/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'shop/js/aos.js' %}"></script>
+
+  <script src="{% static 'shop/js/main.js' %}"></script>
+
+</body>
+<script>
+if (localStorage.getItem('cart') == null)
+{
+    var cart = {}
+}
+else
+{
+    cart = JSON.parse(localStorage.getItem('cart'));
+    var sum = 0;
+    for (item in cart)
+    {
+        sum = sum + cart[item][0];
+    }
+    document.getElementById("total-pro").innerHTML = sum;
+}
+{% block script %}{% endblock %}
+</script>
+</html>

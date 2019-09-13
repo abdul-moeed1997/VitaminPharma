@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Product Details &mdash; Pharma</title>
+{% endblock %}
+
+{% block body %}
+ <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <a
+              href="/shop/products/">Store</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">{{ product.name }}</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-5 mr-auto">
+            <div class="border text-center">
+              <img id="image{{ product.id }}" src="/media/{{ product.image }}" alt="Image" class="img-fluid p-5">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h2 class="text-black" id="name{{ product.id }}" >{{ product.name }}</h2>
+            <p>{{ product.desc }}</p>
+
+
+            <p>{% if product.old_price %}<del>{{ product.old_price }}</del>{% endif %}  <strong class="text-primary h4">RS. <span  id="price{{ product.id }}">{{ product.price }}</span></strong></p>
+
+
+              <p><a style="color: black;" class="buy-now btn btn-sm height-auto px-4 py-3 btn-primary CART" id="{{ product.id }}" >Add To Cart</a></p>
+
+            <h4 class="mt-5">Additional Information</h4>
+
+                  <table class="table">
+
+                    <tbody>
+                      <tr>
+                        <td>Expirey Date</td>
+                        <td class="bg-light">{{ product.expire_date }}</td>
+                      </tr>
+                      <tr>
+                        <td>Code</td>
+                        <td class="bg-light">{{ product.code }}</td>
+                      </tr>
+                      <tr>
+                        <td>Size</td>
+                        <td class="bg-light">{{ product.size }}</td>
+                      </tr>
+                      <tr>
+                        <td>Dosage</td>
+                        <td class="bg-light">{{ product.dosage }}</td>
+                      </tr>
+                    <tr>
+                        <td>Brand</td>
+                        <td class="bg-light">{{ product.brand }}</td>
+                      </tr>
+                    <tr>
+                        <td>Availability</td>
+                        {% if product.quantity %}
+                        <td style="color: cornflowerblue" class="bg-light">In Stock</td>{% else %}
+                        <td style="color: red" class="bg-light">Not in Stock</td>{% endif %}
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+{% block script %}
+        // after click on cart button
+     $('.CART').on('click',  function() {
+        var id = this.id.toString();
+         if (cart[id] !== undefined){
+                cart[id][0] = cart[id][0]+1;
+         }
+         else{
+             var qty=1;
+             var product_image = document.getElementById("image"+id).getAttribute("src");
+             var product_name = document.getElementById("name"+id).innerHTML;
+             var price=document.getElementById("price"+id).innerHTML;
+             cart[id] = [qty, product_name, parseInt(price), product_image];
+         }
+         localStorage.setItem('cart', JSON.stringify(cart));
+
+         document.location="/shop/cart/";
+
+     });
+
+{% endblock %}
